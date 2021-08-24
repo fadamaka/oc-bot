@@ -24,9 +24,10 @@ public final class HardcodedBot {
                 .blockFirst();
 
         client.login().flatMapMany(gateway -> gateway.on(ReactionAddEvent.class))
-                .flatMap(gw -> gw.getClient().getMessageById(Snowflake.of("875068506851401818"),
-                        Snowflake.of("875075391432327188")))
-                .flatMap(m -> m.getReactors(ReactionEmoji.unicode("\uD83D\uDCBC")))
+                .filter(rae -> rae.getChannelId().equals(Snowflake.of("875068506851401818")))
+                .filter(rae -> rae.getMessageId().equals(Snowflake.of("875075391432327188")))
+                .filter(rae -> rae.getEmoji().equals(ReactionEmoji.unicode("\uD83D\uDCBC")))
+                .flatMap(rae -> rae.getUser())
                 .flatMap(user -> channel.getRestChannel()
                         .createMessage("Hey " + role.getMention() + "s, We have a new client " + user.getMention()))
                 .blockFirst();
