@@ -15,17 +15,20 @@ import reactor.core.publisher.Mono;
 @Service
 public class ReactionAddListener implements EventListener<ReactionAddEvent> {
 
-    @Autowired
-    DiscordClient discordClient;
+    GatewayDiscordClient client;
 
     @Override
     public Class<ReactionAddEvent> getEventType() {
         return ReactionAddEvent.class;
     }
 
+    @Autowired
+    public void setClient(GatewayDiscordClient gatewayDiscordClient) {
+        this.client = gatewayDiscordClient;
+    }
+
     @Override
     public Mono<Void> execute(ReactionAddEvent event) {
-        GatewayDiscordClient client = discordClient.login().block();
 
         Channel channel = client.getChannelById(Snowflake.of("874926593833852979")).block();
 
